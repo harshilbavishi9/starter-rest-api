@@ -20,15 +20,35 @@ app.use(express.urlencoded({ extended: true }))
 // #############################################################################
 
 // Create or Update an item
-app.post('/:col/:key', async (req, res) => {
-  console.log(req.body)
-
-  const col = req.params.col
-  const key = req.params.key
-  console.log(`from collection: ${col} delete key: ${key} with params ${JSON.stringify(req.params)}`)
-  const item = await db.collection(col).set(key, req.body)
-  console.log(JSON.stringify(item, null, 2))
-  res.json(item).end()
+app.get('/data', async (req, res) => {
+  let data = [{
+    "employees": [
+      {
+        "id": 1,
+        "name": "John Doe",
+        "position": "Software Engineer",
+        "department": "Engineering",
+        "salary": 80000,
+        "contact": {
+          "email": "john.doe@example.com",
+          "phone": "+1 (555) 123-4567"
+        }
+      },
+      {
+        "id": 2,
+        "name": "Jane Smith",
+        "position": "Marketing Specialist",
+        "department": "Marketing",
+        "salary": 60000,
+        "contact": {
+          "email": "jane.smith@example.com",
+          "phone": "+1 (555) 987-6543"
+        }
+      }
+    ]
+  }
+  ]
+  res.json(data).end()
 })
 
 // Delete an item
@@ -60,10 +80,6 @@ app.get('/:col', async (req, res) => {
   res.json(items).end()
 })
 
-// Catch all handler for all other request.
-app.use('*', (req, res) => {
-  res.json({ msg: 'no route handler found' }).end()
-})
 
 // Start the server
 const port = process.env.PORT || 3000
